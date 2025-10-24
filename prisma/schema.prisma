@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProfileKind {
+  anonymous
+  user
+}
+
+model Profile {
+  id           String        @id @default(cuid())
+  kind         ProfileKind   @default(anonymous)
+
+  email        String?       @unique
+  displayName  String?       @map("display_name")
+  avatarUrl    String?       @map("avatar_url")
+
+  sessions     Session[]
+  wishlists    Wishlist[]
+
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  deletedAt    DateTime?     @map("deleted_at")
+
+  @@index([kind])
+
+  @@map("users")
+}
+
+model Session {
+  id         String   @id @default(uuid())
+  profileId  String   @map("profile_id")
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  userAgent  String?  @map("user_agent")
+  lastSeenAt DateTime @default(now()) @map("last_seen_at")
+  expiresAt  DateTime @map("expires_at")
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  @@index([profileId])
+  @@index([expiresAt])
+
+  @@map("sessions")
+}
+
+model Wishlist {
+  id         String          @id @default(cuid())
+  profileId  String          @map("profile_id")
+  profile    Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name       String          @default("My Wishlist")
+  items      WishlistItem[]
+
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @default(now()) @updatedAt @map("updated_at")
+  deletedAt  DateTime?       @map("deleted_at")
+
+  @@index([profileId])
+  @@unique([profileId])
+
+  @@map("wishlists")
+}
+
+model WishlistItem {
+  id           String   @id @default(cuid())
+  wishlistId   String   @map("wishlist_id")
+  wishlist     Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+
+  volumeId     String   @map("volume_id")
+  title        String
+  subtitle     String?
+  authors      Json?
+  thumbnailUrl String?  @map("thumbnail_url")
+  infoLink     String?  @map("info_link")
+  previewLink  String?  @map("preview_link")
+  language     String?
+  rawData      Json     @map("raw_data")
+
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  @@unique([wishlistId, volumeId])
+  @@index([volumeId])
+
+  @@map("wishlist_items")
+}
