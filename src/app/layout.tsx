@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 import { Providers } from "@/components/providers";
+import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/header";
 import "./globals.css";
 
@@ -30,6 +31,8 @@ export default function RootLayout({
             {children}
           </div>
         </Providers>
+
+        <Toaster />
       </body>
     </html>
   );

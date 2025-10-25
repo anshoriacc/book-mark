@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 
 import { BookCarousel } from "./book-carousel";
@@ -39,16 +39,19 @@ function getRandomSubjects(items: Subject[], count: number): Subject[] {
 }
 
 export const BookRandomCarousel = () => {
-  const [seed] = useState(() => Math.random());
+  const [randomSubjects, setRandomSubjects] = useState<Subject[] | null>(null);
 
-  const randomSubjects = useMemo(
-    () => getRandomSubjects(BOOK_SUBJECTS, 5),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [seed]
-  );
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRandomSubjects(getRandomSubjects(BOOK_SUBJECTS, 5));
+  }, []);
+
+  if (randomSubjects === null) {
+    return null;
+  }
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-8">
       {randomSubjects.map((item, index) => (
         <motion.div
           key={item.subject}

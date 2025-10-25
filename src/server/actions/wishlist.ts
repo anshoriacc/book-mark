@@ -104,6 +104,27 @@ export const addWishlistItem = async (
   >,
 ): Promise<WishlistItem> => {
   try {
+    // Check if item exists but is deleted
+    const deletedItem = await prisma.wishlistItem.findFirst({
+      where: {
+        wishlistId,
+        volumeId,
+        deletedAt: { not: null },
+      },
+    });
+
+    // If deleted item exists, restore it
+    if (deletedItem) {
+      return await prisma.wishlistItem.update({
+        where: { id: deletedItem.id },
+        data: {
+          deletedAt: null,
+          ...data,
+        },
+      });
+    }
+
+    // Otherwise create new item
     const item = await prisma.wishlistItem.create({
       data: {
         wishlistId,

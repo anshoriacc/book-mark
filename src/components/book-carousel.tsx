@@ -31,7 +31,7 @@ export const BookCarousel = ({ subject, title }: Props) => {
   const bookList = bookListQuery.data?.items || [];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <div className="flex items-center justify-between gap-4">
         <h3 className="text-lg font-semibold capitalize">{title ?? subject}</h3>
 

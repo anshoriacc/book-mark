@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useGetBookListQuery } from "@/hooks/api/books";
 import { Book } from "./book";
 
