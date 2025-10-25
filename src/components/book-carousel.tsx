@@ -74,7 +74,7 @@ export const BookCarousel = ({ subject, title }: Props) => {
           )}
         </AnimatePresence>
 
-        <Carousel className="w-full max-w-248 select-none">
+        <Carousel className="w-full max-w-sm sm:max-w-xl md:max-w-248 select-none mx-auto">
           <CarouselContent className="rounded-xl">
             {bookListQuery.isLoading ? (
               [...Array(10)].map((_, index) => (
