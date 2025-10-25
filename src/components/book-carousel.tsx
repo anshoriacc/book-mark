@@ -17,6 +17,7 @@ import {
   CarouselPrevious,
 } from "./ui/carousel";
 import { Button } from "./ui/button";
+import { useQueryState } from "nuqs";
 
 type Props = {
   subject: string;
@@ -24,6 +25,11 @@ type Props = {
 };
 
 export const BookCarousel = ({ subject, title }: Props) => {
+  const [_, setQuery] = useQueryState("query", {
+    defaultValue: "",
+    history: "replace",
+  });
+
   const bookListQuery = useGetBookListQuery({
     query: `subject:${subject}`,
   });
@@ -35,7 +41,12 @@ export const BookCarousel = ({ subject, title }: Props) => {
       <div className="flex items-center justify-between gap-4">
         <h3 className="text-lg font-semibold capitalize">{title ?? subject}</h3>
 
-        <Button variant="link" size="sm">View All</Button>
+        <Button
+          onClick={() => setQuery(`subject:${subject}`)}
+          variant="link"
+          size="sm">
+          View All
+        </Button>
       </div>
 
       <div>

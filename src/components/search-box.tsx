@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import { useQueryState } from "nuqs";
 import { InfoIcon, SearchIcon } from "lucide-react";
 import {
   InputGroup,
@@ -9,10 +11,19 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export const SearchBox = () => {
+  const [query, setQuery] = useQueryState("query", {
+    defaultValue: "",
+    history: "replace",
+  });
+
   return (
     <section className="flex items-center justify-center">
       <InputGroup className="max-w-xl">
-        <InputGroupInput placeholder="Search..." />
+        <InputGroupInput
+          placeholder="Search..."
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+        />
         <InputGroupAddon>
           <SearchIcon />
         </InputGroupAddon>

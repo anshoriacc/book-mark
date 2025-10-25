@@ -88,7 +88,7 @@ export const Book = ({ data }: Props) => {
   return (
     <ResponsiveDialog>
       <ResponsiveDialogTrigger asChild>
-        <Card className="grid aspect-3/2 grid-cols-[auto_1fr] gap-2 overflow-hidden p-2 text-sm">
+        <Card className="grid aspect-3/2 cursor-pointer grid-cols-[auto_1fr] gap-2 overflow-hidden p-2 text-sm select-none">
           <div className="aspect-2/3 h-full max-h-54 overflow-hidden rounded-sm">
             {data.volumeInfo?.imageLinks?.thumbnail ? (
               <Image
